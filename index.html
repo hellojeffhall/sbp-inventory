@@ -1,0 +1,61 @@
+<!doctype HTML>
+<html>
+<head>
+  <title>Sample Title</title>
+</head>
+
+<body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script> 
+    var socket = io();
+
+    var submit_item = function(){
+      var new_name = document.getElementById('item_name_field').value;
+      var new_qty = document.getElementById('item_qty_field').value;
+      var item_info = {"name" : new_name, "qty" : new_qty};
+      socket.emit('request_newItem', item_info);
+      document.getElementById('item_name_field').value = "";
+      document.getElementById('item_qty_field').value = "";
+    };
+
+    var newRow = function(obj){
+      var row = document.createElement('tr');
+
+      var nameTd = document.createElement('td');
+      nameTd.appendChild(document.createTextNode(obj.name));
+
+      var qtyTd = document.createElement('td');
+      qtyTd.appendChild(document.createTextNode(obj.qty));
+
+      row.appendChild(nameTd);
+      row.appendChild(qtyTd);
+      
+      console.log(row);
+      return (row);
+    };
+
+    socket.on('update_itemsList', function(data){
+      // When we have many rows to rewrite, this will suck,
+      // but for now it might be OK to clear all rows and rewrite them.
+
+      document.getElementById('list_items').innerHTML = '<tr><th>Item Name</th><th>Quantity</th></tr>';
+
+      for (var i in data){
+        document.getElementById('list_items')
+                .appendChild(newRow(data[i]));
+      }
+    });
+
+  </script>
+
+  <table id='list_items'>
+  </table>
+
+  <br><br><br>
+  <input id="item_name_field" placeholder="Name"></input>
+  <input id="item_qty_field" placeholder="Quantity"></input>
+  <button onclick="submit_item()">Submit!</button>
+</body>
+
+</html>
