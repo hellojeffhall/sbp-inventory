@@ -1,3 +1,5 @@
+// Test to link c9 with github
+
 var app  = require('express')(); //instead of require('express') and then var app = express();
 var http = require('http').Server(app);//aka http.Server(app)?
 var io = require('socket.io')(http); //(http) same as io.listen(Server)
@@ -15,7 +17,7 @@ var items = [
 
 app.get('/', function(request,response){
   console.log('about to send file');
-  response.sendfile('index02.html');
+  response.sendfile('index.html');
   console.log('file sent');
 });
 
@@ -47,5 +49,10 @@ io.on('connection', function(socket){
   };
 });
 
-http.listen(3001);
+var c9PORT = process.env.PORT;
+var c9IP = process.env.IP;
+
+http.listen(c9PORT, c9IP, function(){
+  console.log("listening on " + c9IP + ":" + c9PORT);
+});
 
