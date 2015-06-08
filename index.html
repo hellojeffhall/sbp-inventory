@@ -45,6 +45,40 @@
         document.getElementById('list_items')
                 .appendChild(newRow(data[i]));
       }
+
+    });
+
+
+    socket.on('update_results', function(data){
+      alert(data);
+      var headings = data.column_headings; // Array of columns to display
+                                           // should include "column_name_db" and 
+                                           // "column_name_display".
+
+      var rows = data.rows;                // Array of rows to display.
+                                           // Each row object should have a "column_name_db"
+                                           // property as well as a "value" property.
+                                           // This way, we know what to display
+                                           // and under which column.
+      alert('typeof rows=' + typeof rows);
+      var html_to_return = '';
+
+      //alert(headings);
+      //alert(rows);
+
+      for(var i in rows){
+        var row = rows[i];
+
+        html_to_return += '<tr>';
+
+        for(var i in headings){
+          html_to_return += '<td>' + row.headings[i] + '</td>';
+        }
+
+        html_to_return += '</tr>';
+      }
+      alert(html_to_return);
+      document.getElementById('list_items').innerHTML = html_to_return;
     });
 
   </script>
