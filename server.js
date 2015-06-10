@@ -1,12 +1,10 @@
-// Test to link c9 with github
-
-var app  = require('express')(); //instead of require('express') and then var app = express();
-var http = require('http').Server(app);//aka http.Server(app)?
+var app  = require('express')(); 
+var http = require('http').Server(app);
 var io = require('socket.io')(http); //(http) same as io.listen(Server)
 var config = require('./config.js');
 var db = require('./db.js');
 
-
+// For testing, until we're hooked into Postgres
 var items = [
   {
     name : 'Ryobi Drill',
@@ -19,9 +17,8 @@ var items = [
 ];
 
 app.get('/', function(request,response){
-  console.log('about to send file');
+  console.log('\'/\' requested');
   response.sendfile('index.html');
-  console.log('file sent');
 });
 
 io.on('connection', function(socket){
@@ -45,6 +42,11 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('socket disconnected');
   });
+
+// This should be removed once we're up and 
+// running with Postgres. db.js should
+// contain all logic for
+// db interaction.
 
   socket.on('request_newItem', function(data){
     var tempName = data.name;
@@ -72,7 +74,7 @@ http.listen(config.C9PORT, config.C9IP, function(){
   console.log("listening on " + config.C9IP + ":" + config.C9PORT);
 });
 
-
+// For testing; can probably be removed.
 var newItem = {
   name : "WAREHOUSE",
   address_line_1 : '88 beach street',
