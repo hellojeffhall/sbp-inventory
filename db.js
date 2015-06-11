@@ -51,18 +51,20 @@ db.sites.newSite = function(args){
 
 // RETURN ALL SITES IN DATABASE
 
-db.sites.getAllSites = function(){
-  var returnable = [];
+db.getAllSites = function(caller_socket, whatToEmit){
   var query = db.client.query('SELECT ' + ' * from sites;');
-
-  query.on('row', function(row){
-    returnable.push(row);
+  var allRows = [];
+  query.on('row', function(row, result){
+    result.addRow(row);
+    allRows.push(row);
     console.log('onrow, row name=' + row.name + ' city=' + row.city + 'typeof row =' + typeof row);
   });
 
-  query.on('end', function(){
-    console.log('typeof reutrnable=' + typeof returnable);
-    return returnable;
+  query.on('end', function(result){
+    console.log('query finished loading; typeof result=' + typeof result);
+    db.client.end();
+    var toReturn = {column_headings : ['name','city','state'] , rows : allRows};
+    caller_socket.emit(whatToEmit, toReturn);
   });
 };
 

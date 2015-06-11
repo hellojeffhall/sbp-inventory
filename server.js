@@ -24,20 +24,21 @@ app.get('/', function(request,response){
 io.on('connection', function(socket){
 
   console.log('new socket connected');
-  socket.emit('update_itemsList', items);
 
-  var sitesData = db.sites.getAllSites();
-
+  //socket.emit('update_itemsList', items);
+  //  var sitesData = db.sites.getAllSites();
   // SITESDATA IS NOT YET DEFINED AT THIS POINT!
   // THIS CODE RUNS FIRST, THEN getAllSites completes LATER!
+  //  console.log('typeof sitesData=' + typeof sitesData);
+  
+  db.getAllSites(socket, 'update_results');
 
-  console.log('typeof sitesData=' + typeof sitesData);
-  var updated_sites = {
-    column_headings : ['name', 'city', 'state'],
-    rows : sitesData
-  };
-
-  socket.emit('update_results', updated_sites);
+  //var updated_sites = {
+  //  column_headings : ['name', 'city', 'state'],
+  //  rows : db.getAllSites(function(){  socket.emit('update_results', this);
+  //})
+  //};
+//  socket.emit('update_results', updated_sites);
 
   socket.on('disconnect', function(){
     console.log('socket disconnected');
@@ -75,12 +76,12 @@ http.listen(config.C9PORT, config.C9IP, function(){
 });
 
 // For testing; can probably be removed.
-var newItem = {
-  name : "WAREHOUSE",
-  address_line_1 : '88 beach street',
-  address_line_2 : '',
-  city : 'Far Rockaway',
-  state : 'NY',
-  zip : 'dunno'
-};
+//var newItem = {
+//  name : "WAREHOUSE",
+//  address_line_1 : '88 beach street',
+//  address_line_2 : '',
+//  city : 'Far Rockaway',
+//  state : 'NY',
+//  zip : 'dunno'
+//};
 

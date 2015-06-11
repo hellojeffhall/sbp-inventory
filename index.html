@@ -31,11 +31,12 @@
       row.appendChild(nameTd);
       row.appendChild(qtyTd);
       
-      console.log(row);
+      console.log('row: ' + row);
       return (row);
     };
 
     socket.on('update_itemsList', function(data){
+
       // When we have many rows to rewrite, this will suck,
       // but for now it might be OK to clear all rows and rewrite them.
 
@@ -50,7 +51,9 @@
 
 
     socket.on('update_results', function(data){
-      alert(data);
+      alert('data.rows according to browser: ' + data.rows);
+      alert('data.column_headings, according to browser: ' + data.column_headings);
+
       var headings = data.column_headings; // Array of columns to display
                                            // should include "column_name_db" and 
                                            // "column_name_display".
@@ -60,7 +63,7 @@
                                            // property as well as a "value" property.
                                            // This way, we know what to display
                                            // and under which column.
-      alert('typeof rows=' + typeof rows);
+      //alert('typeof rows=' + typeof rows);
       var html_to_return = '';
 
       //alert(headings);
@@ -71,8 +74,12 @@
 
         html_to_return += '<tr>';
 
-        for(var i in headings){
-          html_to_return += '<td>' + row.headings[i] + '</td>';
+        for(var j in headings){
+          var temp_heading = headings[j];
+          alert('temp_heading ' + temp_heading);
+          alert('typepf row ' + typeof row + '| value ' + row);
+          html_to_return += ('<td>' + row[temp_heading] + '</td>');
+ //         alert('html to return: ' + html_to_return);
         }
 
         html_to_return += '</tr>';
