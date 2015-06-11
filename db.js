@@ -53,17 +53,17 @@ db.sites.newSite = function(args){
 
 db.getAllSites = function(caller_socket, whatToEmit){
   var query = db.client.query('SELECT ' + ' * from sites;');
-  var allRows = [];
+//  var allRows = [];
   query.on('row', function(row, result){
     result.addRow(row);
-    allRows.push(row);
-    console.log('onrow, row name=' + row.name + ' city=' + row.city + 'typeof row =' + typeof row);
+//    allRows.push(row);
+//    console.log('onrow, row name=' + row.name + ' city=' + row.city + 'typeof row =' + typeof row);
   });
 
   query.on('end', function(result){
     console.log('query finished loading; typeof result=' + typeof result);
-    db.client.end();
-    var toReturn = {column_headings : ['name','city','state'] , rows : allRows};
+//    db.client.end();
+    var toReturn = {column_headings : ['name','city','state'] , rows : result.rows};
     caller_socket.emit(whatToEmit, toReturn);
   });
 };
