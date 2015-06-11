@@ -8,11 +8,8 @@ db.items = {} // Container for exporting item-related functions.
 var conString = 'tcp://' + config.DB_USERNAME + ':' + config.DB_PASSWORD + 
                 '@' + config.C9IP + ':5432/' + config.DB_NAME;
 
-//var conString = 'tcp://bob:bob@' + config.C9IP + ':5432/simpletest';
-
 db.client = new pg.Client(conString);
 
-//console.log(conString);
 db.client.connect();
 console.log('connected to database!');
 
@@ -23,8 +20,8 @@ console.log('connected to database!');
 // CREATE NEW SITE IN DATABASE
 
 db.sites.newSite = function(args){
-  // TODO - what happens if a user doesn't provide all necessary arguments?
 
+  // TODO - what happens if a user doesn't provide all necessary arguments?
   //
   // Pass in an object for arguments. The object MUST contain:
   //
@@ -53,17 +50,13 @@ db.sites.newSite = function(args){
 
 db.getAllSites = function(caller_socket, whatToEmit){
   var query = db.client.query('SELECT ' + ' * from sites;');
-//  var allRows = [];
   query.on('row', function(row, result){
     result.addRow(row);
-//    allRows.push(row);
-//    console.log('onrow, row name=' + row.name + ' city=' + row.city + 'typeof row =' + typeof row);
   });
 
   query.on('end', function(result){
     console.log('query finished loading; typeof result=' + typeof result + ' typeof result.fields= ' + typeof result.fields);
     console.log(JSON.stringify(result));
-//    db.client.end();
     var column_headings_array = [];
     for (i in result.fields){
         column_headings_array.push(result.fields[i].name);

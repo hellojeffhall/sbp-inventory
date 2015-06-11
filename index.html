@@ -35,21 +35,6 @@
       return (row);
     };
 
-//    socket.on('update_itemsList', function(data){
-
-      // When we have many rows to rewrite, this will suck,
-      // but for now it might be OK to clear all rows and rewrite them.
-
-  //    document.getElementById('list_items').innerHTML = '<tr><th>Item Name</th><th>Quantity</th></tr>';
-
-    //  for (var i in data){
-      //  document.getElementById('list_items')
-        //        .appendChild(newRow(data[i]));
-     // }
-
-//    });
-
-
     socket.on('update_results', function(data){
       alert('data.rows according to browser: ' + data.rows);
       alert('data.column_headings, according to browser: ' + data.column_headings);
@@ -63,11 +48,7 @@
                                            // property as well as a "value" property.
                                            // This way, we know what to display
                                            // and under which column.
-      //alert('typeof rows=' + typeof rows);
       var html_to_return = '';
-
-      //alert(headings);
-      //alert(rows);
 
       for(var i in rows){
         var row = rows[i];
@@ -76,10 +57,7 @@
 
         for(var j in headings){
           var temp_heading = headings[j];
-//          alert('temp_heading ' + temp_heading);
-//          alert('typepf row ' + typeof row + '| value ' + row);
           html_to_return += ('<td>' + row[temp_heading] + '</td>');
- //         alert('html to return: ' + html_to_return);
         }
 
         html_to_return += '</tr>';
