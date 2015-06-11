@@ -35,19 +35,19 @@
       return (row);
     };
 
-    socket.on('update_itemsList', function(data){
+//    socket.on('update_itemsList', function(data){
 
       // When we have many rows to rewrite, this will suck,
       // but for now it might be OK to clear all rows and rewrite them.
 
-      document.getElementById('list_items').innerHTML = '<tr><th>Item Name</th><th>Quantity</th></tr>';
+  //    document.getElementById('list_items').innerHTML = '<tr><th>Item Name</th><th>Quantity</th></tr>';
 
-      for (var i in data){
-        document.getElementById('list_items')
-                .appendChild(newRow(data[i]));
-      }
+    //  for (var i in data){
+      //  document.getElementById('list_items')
+        //        .appendChild(newRow(data[i]));
+     // }
 
-    });
+//    });
 
 
     socket.on('update_results', function(data){
@@ -76,8 +76,8 @@
 
         for(var j in headings){
           var temp_heading = headings[j];
-          alert('temp_heading ' + temp_heading);
-          alert('typepf row ' + typeof row + '| value ' + row);
+//          alert('temp_heading ' + temp_heading);
+//          alert('typepf row ' + typeof row + '| value ' + row);
           html_to_return += ('<td>' + row[temp_heading] + '</td>');
  //         alert('html to return: ' + html_to_return);
         }

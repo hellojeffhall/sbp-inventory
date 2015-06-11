@@ -61,9 +61,14 @@ db.getAllSites = function(caller_socket, whatToEmit){
   });
 
   query.on('end', function(result){
-    console.log('query finished loading; typeof result=' + typeof result);
+    console.log('query finished loading; typeof result=' + typeof result + ' typeof result.fields= ' + typeof result.fields);
+    console.log(JSON.stringify(result));
 //    db.client.end();
-    var toReturn = {column_headings : ['name','city','state'] , rows : result.rows};
+    var column_headings_array = [];
+    for (i in result.fields){
+        column_headings_array.push(result.fields[i].name);
+    };
+    var toReturn = {column_headings : column_headings_array /*['name','city','state']*/ , rows : result.rows};
     caller_socket.emit(whatToEmit, toReturn);
   });
 };
