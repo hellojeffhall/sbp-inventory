@@ -20,6 +20,7 @@
     };
 
     var newRow = function(obj){
+      alert('function newRow running');
       var row = document.createElement('tr');
 
       var nameTd = document.createElement('td');
@@ -48,22 +49,34 @@
                                            // property as well as a "value" property.
                                            // This way, we know what to display
                                            // and under which column.
-      var html_to_return = '';
+     alert('about to do map stuff');
+      var html_array = data.rows.map(function(temp_row){
+        var this_row = headings.map(function(temp_heading){
+          return '<td>' + temp_row[temp_heading] + '</td>';          
+        });
+        this_row.unshift('<tr>');
+        this_row.push('</tr>');
+        //alert('stringify this row = ' + JSON.stringify(this_row));
+        return this_row.join('');
+      });
 
-      for(var i in rows){
-        var row = rows[i];
+//
+//      for(var i in rows){
+//        var row = rows[i];
+//
+//        html_to_return += '<tr>';
+//
+//        for(var j in headings){
+//          var temp_heading = headings[j];
+//          html_to_return += ('<td>' + row[temp_heading] + '</td>');
+//        }
+//
 
-        html_to_return += '<tr>';
+//      alert('html_array prejoin= ' + html_array    
+//        html_array.join("");
 
-        for(var j in headings){
-          var temp_heading = headings[j];
-          html_to_return += ('<td>' + row[temp_heading] + '</td>');
-        }
-
-        html_to_return += '</tr>';
-      }
-      alert(html_to_return);
-      document.getElementById('list_items').innerHTML = html_to_return;
+      alert('html_array prejoin= ' + html_array);
+      document.getElementById('list_items').innerHTML = html_array.join();
     });
 
   </script>

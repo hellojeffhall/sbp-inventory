@@ -56,7 +56,7 @@ db.getAllSites = function(caller_socket, whatToEmit){
 
   query.on('end', function(result){
     console.log('query finished loading; typeof result=' + typeof result + ' typeof result.fields= ' + typeof result.fields);
-    console.log(JSON.stringify(result));
+    //console.log(JSON.stringify(result));
     var column_headings_array = [];
     for (i in result.fields){
         column_headings_array.push(result.fields[i].name);
