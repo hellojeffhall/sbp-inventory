@@ -1,7 +1,7 @@
-pg = require('pg');
-config = require('./config.js');
+var pg = require('pg');
+var config = require('./config.js');
 
-db = {}; // Container for exporting whole module.
+var db = {}; // Container for exporting whole module.
 db.sites = {}; // Container for exporting site-related functions.
 db.items = {} // Container for exporting item-related functions.
 
@@ -44,12 +44,27 @@ db.sites.newSite = function(args){
   else{
     return 'fail';
   }
-}
+};
 
 // RETURN ALL SITES IN DATABASE
 
 db.getAllSites = function(caller_socket, whatToEmit){
-  var query = db.client.query('SELECT ' + ' * from sites;');
+  
+  var col_to_return_array = [
+    {name_col : 'name', name_display : 'Site Name'},
+    {name_col : 'address_line_1', name_display : 'Address Line 1'},
+    {name_col : 'address_line_2', name_display : 'Address Line 2'},
+    {name_col : 'city', name_display : 'City'},
+    {name_col : 'state', name_display : 'State'},
+    {name_col : 'zip', name_display : 'Zip Code'} 
+  ];
+  var col_to_return_string = col_to_return_array.map(function(temp_col){
+    return temp_col.name_col + ' as \"' + temp_col.name_display + '\"';
+  }).join(", ");
+  
+  console.log(col_to_return_string);
+
+  var query = db.client.query('SELECT ' + col_to_return_string + ' from sites;');
   query.on('row', function(row, result){
     result.addRow(row);
   });
@@ -58,9 +73,9 @@ db.getAllSites = function(caller_socket, whatToEmit){
     console.log('query finished loading; typeof result=' + typeof result + ' typeof result.fields= ' + typeof result.fields);
     //console.log(JSON.stringify(result));
     var column_headings_array = [];
-    for (i in result.fields){
+    for (var i in result.fields){
         column_headings_array.push(result.fields[i].name);
-    };
+    }
     var toReturn = {column_headings : column_headings_array /*['name','city','state']*/ , rows : result.rows};
     caller_socket.emit(whatToEmit, toReturn);
   });

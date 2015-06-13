@@ -2,10 +2,18 @@
 <html>
 <head>
   <title>Sample Title</title>
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <style>
+    body {
+      background-color: blue;
+    }
+
+
+</style>
 </head>
 
 <body>
-
+This is a test of text. <h1>This</h1> is in h1.
   <script src="/socket.io/socket.io.js"></script>
   <script> 
     var socket = io();
@@ -37,9 +45,14 @@
 
     socket.on('update_results', function(data){
 
-      var headings = data.column_headings; // Array of columns to display
-                                           // should include "column_name_db" and 
-                                           // "column_name_display".
+      var headings = data.column_headings; // Array of column headings.
+                                           // We should figure out how to have a display
+                                           // name for each.
+      var html_array_headings = '<tr>' +
+        headings.map(function(temp_heading){
+          return '<th>' + temp_heading + '</th>';
+          }).join("") +
+        '</tr>';
 
       var rows = data.rows;                // Array of rows to display.
                                            // Each row object should have a "column_name_db"
@@ -47,7 +60,7 @@
                                            // This way, we know what to display
                                            // and under which column.
 
-      var html_array = data.rows.map(function(temp_row){
+      var html_array = rows.map(function(temp_row){
 
         var this_row = headings.map(function(temp_heading){
           return '<td>' + temp_row[temp_heading] + '</td>';          
@@ -56,7 +69,7 @@
         return '<tr>' +  this_row.join('') + '</tr>';
       });
 
-      document.getElementById('results_table').innerHTML = html_array.join('');
+      document.getElementById('results_table').innerHTML = html_array_headings + html_array.join('');
     });
 
   </script>

@@ -20,23 +20,23 @@ io.on('connection', function(socket){
     console.log('socket disconnected');
   });
 
-  socket.on('request_newItem', function(data){
-    var tempName = data.name;
-    var tempQty = data.qty;
-    if(tempName && tempQty){
-      items.push({name : tempName, qty : tempQty});
-      pushUpdatedList();
-    }
-    else{
-      console.log("Bad object submitted for addition to items list!");
-    }
-    console.log(data);
-    pushUpdatedList();
-  });
+//  socket.on('request_newItem', function(data){
+//    var tempName = data.name;
+//    var tempQty = data.qty;
+//    if(tempName && tempQty){
+//      items.push({name : tempName, qty : tempQty});
+//      pushUpdatedList();
+//    }
+//    else{
+//      console.log("Bad object submitted for addition to items list!");
+//    }
+//    console.log(data);
+//    pushUpdatedList();
+//  });
 
-  function pushUpdatedList(){
-    io.sockets.emit('update_itemsList', items);
-  };
+//  function pushUpdatedList(){
+//    io.sockets.emit('update_itemsList', items);
+//  };
 });
 
 http.listen(config.C9PORT, config.C9IP, function(){
