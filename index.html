@@ -27,20 +27,14 @@ This is a test of text. <h1>This</h1> is in h1.
       document.getElementById('item_qty_field').value = "";
     };
 
-    var newRow = function(obj){
-      var row = document.createElement('tr');
-
-      var nameTd = document.createElement('td');
-      nameTd.appendChild(document.createTextNode(obj.name));
-
-      var qtyTd = document.createElement('td');
-      qtyTd.appendChild(document.createTextNode(obj.qty));
-
-      row.appendChild(nameTd);
-      row.appendChild(qtyTd);
-      
-      console.log('row: ' + row);
-      return (row);
+    var escapeHtml = function(str){
+      //
+      // Borrowed this function from:
+      // http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/
+      //
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
     };
 
     socket.on('update_results', function(data){
@@ -63,13 +57,16 @@ This is a test of text. <h1>This</h1> is in h1.
       var html_array = rows.map(function(temp_row){
 
         var this_row = headings.map(function(temp_heading){
-          return '<td>' + temp_row[temp_heading] + '</td>';          
+          // "temp_row" is based on user-entered information, and needs
+          // to be escaped before it can be displayed.
+          return '<td>' + escapeHtml(temp_row[temp_heading]) + '</td>';          
         });
 
         return '<tr>' +  this_row.join('') + '</tr>';
       });
 
-      document.getElementById('results_table').innerHTML = html_array_headings + html_array.join('');
+      document.getElementById('results_table').innerHTML = html_array_headings + 
+                                                 html_array.join('');
     });
 
   </script>
