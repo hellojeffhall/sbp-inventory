@@ -1,7 +1,7 @@
 {
-  "name": "socket_test01",
+  "name": "sbp-inventory",
   "version": "0.0.1",
-  "description": "Socket.io experimentation.",
+  "description": "Inventory system for SBP",
   "dependencies": {
     "express": "^4.12.4",
     "socket.io": "^1.3.5"

@@ -1,13 +1,32 @@
-var app  = require('express')(); 
+var express = require('express');
+var app  = express(); 
 var http = require('http').Server(app);
-var io = require('socket.io')(http); //(http) same as io.listen(Server)
+var path = require("path");
+var io = require('socket.io')(http); //(app) same as io.listen(Server)
+
 var config = require('./config.js');
 var db = require('./db.js');
 
+var public_root = __dirname + '/../public/' ;
+var modules_root = __dirname + '/../node_modules/';
+
+app.use(express.static(public_root));
+
+//app.listen(config.C9PORT, 
+//  config.C9IP,
+//  '',
+//  function(){console.log('connectionOK');}
+//);
+
 app.get('/', function(request,response){
   console.log('\'/\' requested');
-  response.sendfile('index.html');
+  response.sendfile(public_root + 'index.html');
 });
+
+app.get('/socket.io/socket.io.js',function(req,res) {
+    res.sendfile(path.resolve(modules_root + 'socket.io/socket.io.js'));
+});
+
 
 io.on('connection', function(socket){
 
