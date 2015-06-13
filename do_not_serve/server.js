@@ -20,7 +20,8 @@ app.use(express.static(public_root));
 
 app.get('/', function(request,response){
   console.log('\'/\' requested');
-  response.sendfile(public_root + 'index.html');
+  //response.sendfile(public_root + 'index.html');
+  //response.render(public_root + 'index.jade',{title: "This is a title" , message : "This is a message."});
 });
 
 app.get('/socket.io/socket.io.js',function(req,res) {

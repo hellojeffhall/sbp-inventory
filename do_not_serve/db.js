@@ -56,7 +56,8 @@ db.getAllSites = function(caller_socket, whatToEmit){
     {name_col : 'address_line_2', name_display : 'Address Line 2'},
     {name_col : 'city', name_display : 'City'},
     {name_col : 'state', name_display : 'State'},
-    {name_col : 'zip', name_display : 'Zip Code'} 
+    {name_col : 'zip', name_display : 'Zip Code'} ,
+    {name_col : 'zz_id', name_display : 'Site ID'} 
   ];
   var col_to_return_string = col_to_return_array.map(function(temp_col){
     return temp_col.name_col + ' as \"' + temp_col.name_display + '\"';
@@ -76,7 +77,10 @@ db.getAllSites = function(caller_socket, whatToEmit){
     for (var i in result.fields){
         column_headings_array.push(result.fields[i].name);
     }
-    var toReturn = {column_headings : column_headings_array /*['name','city','state']*/ , rows : result.rows};
+    // Return an object containing two arrays.
+    // The first is an array of column headings.
+    // The second is an array of rows that were returned.
+    var toReturn = {column_headings : column_headings_array, rows : result.rows};
     caller_socket.emit(whatToEmit, toReturn);
   });
 };
