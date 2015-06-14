@@ -1,7 +1,7 @@
 body {
     background-color: lightblue;
 }
-    h1 {
-      color: maroon;
-      margin-left: 40px;
-    } 
+h1 {
+  color: maroon;
+  padding: 0px;
+} 
