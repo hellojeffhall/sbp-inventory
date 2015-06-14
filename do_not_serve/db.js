@@ -11,7 +11,7 @@ var conString = 'tcp://' + config.DB_USERNAME + ':' + config.DB_PASSWORD +
 db.client = new pg.Client(conString);
 
 db.client.connect();
-console.log('connected to database!');
+//console.log('connected to database!');
 
 //------------------------------------------
 // FUNCTIONS FOR SITES
@@ -63,7 +63,7 @@ db.getAllSites = function(caller_socket, whatToEmit){
     return temp_col.name_col + ' as \"' + temp_col.name_display + '\"';
   }).join(", ");
   
-  console.log(col_to_return_string);
+  //console.log(col_to_return_string);
 
   var query = db.client.query('SELECT ' + col_to_return_string + ' from sites;');
   query.on('row', function(row, result){
@@ -71,12 +71,9 @@ db.getAllSites = function(caller_socket, whatToEmit){
   });
 
   query.on('end', function(result){
-    console.log('query finished loading; typeof result=' + typeof result + ' typeof result.fields= ' + typeof result.fields);
-    //console.log(JSON.stringify(result));
-    var column_headings_array = [];
-    for (var i in result.fields){
-        column_headings_array.push(result.fields[i].name);
-    }
+    var column_headings_array = result.fields.map(function(field){
+      return field.name;
+    });
     // Return an object containing two arrays.
     // The first is an array of column headings.
     // The second is an array of rows that were returned.

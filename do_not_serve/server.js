@@ -12,32 +12,24 @@ var modules_root = __dirname + '/../node_modules/';
 
 app.use(express.static(public_root));
 
-//app.listen(config.C9PORT, 
-//  config.C9IP,
-//  '',
-//  function(){console.log('connectionOK');}
-//);
-
-app.get('/', function(request,response){
-  console.log('\'/\' requested');
+//app.get('/', function(request,response){
+//  console.log('\'/\' requested');
   //response.sendfile(public_root + 'index.html');
   //response.render(public_root + 'index.jade',{title: "This is a title" , message : "This is a message."});
-});
+//});
 
 app.get('/socket.io/socket.io.js',function(req,res) {
     res.sendfile(path.resolve(modules_root + 'socket.io/socket.io.js'));
 });
 
-
 io.on('connection', function(socket){
-
-  console.log('new socket connected');
-
+  console.log('Socket connected: ' + socket.id);
+  
   // Ask the server for all sites, and have it emit "update_results" when done.
   db.getAllSites(socket, 'update_results');
 
   socket.on('disconnect', function(){
-    console.log('socket disconnected');
+    console.log('Socket disconnected: ' + socket.id);
   });
 
 //  socket.on('request_newItem', function(data){
