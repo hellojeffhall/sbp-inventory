@@ -21,16 +21,31 @@ utils.escapeHtml = function(str){
   return div.innerHTML;
 };
 
-utils.objectFinder = function (array_to_search, property_to_inspect, value_to_find ){
+// utils.objectFinder = function (array_to_search, property_to_inspect, value_to_find ){
+//   //
+//   // A function to find the position of the first object
+//   // in an array to have a certain property with a certain value.
+//   // If the object isn't found, return -1.
+//   //
+//   for(var i=0; i++; i<array_to_search.length){
+//     if(array_to_search[i].property_to_inspect === value_to_find){return i;}
+//   }
+//   return -1;
+// };
+
+utils.objectFinder = function (array_to_search, property_to_inspect, value_to_find , start_position){
   //
   // A function to find the position of the first object
   // in an array to have a certain property with a certain value.
   // If the object isn't found, return -1.
   //
-  for(var i=0; i++; i<array_to_search.length){
-    if(array_to_search[i].property_to_inspect === value_to_find){return i;}
+  if(start_position >= array_to_search.length){
+    return -1;
   }
-  return -1;
+  else if(array_to_search[start_position][property_to_inspect]==value_to_find){
+    return start_position;
+  }
+  return utils.objectFinderFunctional(array_to_search,property_to_inspect,value_to_find,start_position+1);
 };
 
 utils.updateState=function(table_name, view_mode, data){
@@ -99,14 +114,15 @@ views.change_view = function(table_name, view_mode, query_info){
 
 views.listView.loadView = function(data){
   // Should be called with one argument, an object containing...
-  
+  document.getElementById('detail_info').innerHTML = '';
   var headings = data.column_headings;  // Array of column headings.
                                         // We should figure out how to have a display
                                         // name for each.
   var html_array_headings = '<tr>' +
-    headings.map(function(temp_heading){
-      return '<th>' + temp_heading + '</th>';
-      }).join("") +'</tr>';
+                              headings.map(function(temp_heading){
+                                return '<th>' + temp_heading + '</th>';
+                              }).join("") +
+                            '</tr>';
 
   var rows = data.rows;                // Array of rows to display.
                                       // Each row object should have a "column_name_db"
@@ -119,24 +135,22 @@ views.listView.loadView = function(data){
     var this_row = headings.map(function(temp_heading){
       // "temp_row" is based on user-entered information, and needs
       // to be escaped before it can be displayed.
-      return '<td contenteditable="false" data-col='+ utils.escapeHtml(temp_row[temp_heading]) +' onblur="edit_value(this)">' + utils.escapeHtml(temp_row[temp_heading]) + '</td>';          
+      return '<td data-col='+ utils.escapeHtml(temp_row[temp_heading]) +'>' + 
+                utils.escapeHtml(temp_row[temp_heading]) + 
+              '</td>';            
     });
-
-    //return '<tr data-pk='+ utils.escapeHtml(temp_row.zz_id) +' > ' +  this_row.join('') + '</tr>';
-    var finalToReturn = "<tr>" +  
-                          this_row.join('') +
-                          "<td>" +
-                            "<button data-pk='"+ 
-                              utils.escapeHtml(temp_row['Site ID']) +
-                              "' onclick='views.change_view(&quot;"
-                              +state.table.trim()+ 
-                              "&quot;, &quot;detail&quot;, this)'>View" + 
-                            "</button>" + 
-                          "</td>"+
-                        "</tr>";
-    //<button data-pk='+ utils.escapeHtml(temp_row['Site ID']) +' onclick="edit_begin(this)">Edit</button>';
-
-    return finalToReturn;
+    
+    return "<tr>" +  
+              this_row.join('') +
+              "<td>" +
+                "<button data-pk='"+ 
+                  utils.escapeHtml(temp_row['Site ID']) +
+                  "' onclick='views.change_view(&quot;"
+                  +state.table.trim()+ 
+                  "&quot;, &quot;detail&quot;, this)'>View" + 
+                "</button>" + 
+              "</td>"+
+            "</tr>";
   });
 
   document.getElementById('results_table').innerHTML = html_array_headings + html_array.join('');
@@ -150,6 +164,10 @@ views.listView.loadView = function(data){
 // BEGIN: VIEWS: DETAIL
 //------------------------------------------------------------------------------
 views.detailView.sites.loadView = function(primary_key){
+  document.getElementById('results_table').innerHTML = '';
+  document.getElementById('detail_title').innerHTML = 'ID: ' + utils.escapeHtml(primary_key);
+  document.getElementById('detail_title').innerHTML += ' <button onclick="alert(&quot;This is where you would be brought back to the list view.&quot;)">Back to List View</button>'
+  
   alert('This is where you would be brought to the "detail" view for site w/ ID=' + primary_key + '.');
 };
 
@@ -221,10 +239,33 @@ var edit_cancel =  function(){
 //------------------------------------------------------------------------------
 
 
+//------------------------------------------------------------------------------
+// BEGIN: DATABASE REQUESTS
+//------------------------------------------------------------------------------
 
 var request_create = function(){};
-var request_read = function(){};
+
+var request_read = function(table, view_mode, query_info){
+  // table
+  //    Should be "sites"
+  // view_mode
+  //    Should be 'list' or 'detail'
+  // query_info
+  //    Should be a specific primary key for view_mode=detail,
+  //    or should be some sort of criteria for the list. (Still working on that
+  //    bit, probably JSON with column names as keys and criteria as values.)
+  //
+  // socket.emit('request_read', {
+  //                               table      : table, 
+  //                               view_mode  : view_mode, 
+  //                               query_info : query_info,
+  //                               socket_id  : socket.id
+  //                             }
+  // );
+};
+
 var request_delete = function(){};
+
 var request_update = function(){
   //
   // Should be passed an array of updates to make.
@@ -240,6 +281,11 @@ var request_update = function(){
   // new_value
   //
 };
+
+//------------------------------------------------------------------------------
+// END: DATABASE REQUESTS
+//------------------------------------------------------------------------------
+
 socket.on('update_results', function(data){
   utils.setInitialStateIfNeeded(data);
   views.change_view(state.table, state.view_mode, state.data);

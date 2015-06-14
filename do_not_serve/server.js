@@ -23,13 +23,20 @@ app.get('/socket.io/socket.io.js',function(req,res) {
 });
 
 io.on('connection', function(socket){
-  console.log('Socket connected: ' + socket.id);
+  console.log('Socket connected: ' + socket.id +' at ' + new Date());
   
   // Ask the server for all sites, and have it emit "update_results" when done.
   db.getAllSites(socket, 'update_results');
 
+  socket.on('request_read',function(data){
+    if(data.table=='sites'&&data.view_mode=='list'){
+      db.getAllSites(socket, 'update_results');
+    }
+  });
+
+
   socket.on('disconnect', function(){
-    console.log('Socket disconnected: ' + socket.id);
+    console.log('Socket disconnected: ' + socket.id +' at ' + new Date());
   });
 
 //  socket.on('request_newItem', function(data){
