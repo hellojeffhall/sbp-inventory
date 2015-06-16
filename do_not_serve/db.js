@@ -62,8 +62,6 @@ db.getAllSites = function(caller_socket, whatToEmit){
   var col_to_return_string = col_to_return_array.map(function(temp_col){
     return temp_col.name_col + ' as \"' + temp_col.name_display + '\"';
   }).join(", ");
-  
-  //console.log(col_to_return_string);
 
   var query = db.client.query('SELECT ' + col_to_return_string + ' from sites;');
   query.on('row', function(row, result){
@@ -77,8 +75,7 @@ db.getAllSites = function(caller_socket, whatToEmit){
     // Return an object containing two arrays.
     // The first is an array of column headings.
     // The second is an array of rows that were returned.
-    var toReturn = {column_headings : column_headings_array, rows : result.rows};
-    caller_socket.emit(whatToEmit, toReturn);
+    return {column_headings : column_headings_array, rows : result.rows};
   });
 };
 
@@ -89,6 +86,5 @@ db.getAllSites = function(caller_socket, whatToEmit){
 //------------------------------------------
 // GENERAL FUNCTIONS
 //------------------------------------------
-
 
 module.exports = db;

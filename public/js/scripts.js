@@ -1,6 +1,3 @@
-var socket = io.connect();  // io is defined in a script that is called
-                            // prior to this script loading.
-                            //
 var state = {};             // For recording things realted to state.
                             // E.g., current table.
                             // Maybe we can use this at some point to create
@@ -286,7 +283,3 @@ var request_update = function(){
 // END: DATABASE REQUESTS
 //------------------------------------------------------------------------------
 
-socket.on('update_results', function(data){
-  utils.setInitialStateIfNeeded(data);
-  views.change_view(state.table, state.view_mode, state.data);
-});
