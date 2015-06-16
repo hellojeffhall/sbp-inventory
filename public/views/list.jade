@@ -1,0 +1,40 @@
+include mixins
+html
+    head
+        include head
+    body
+        +table(
+            ["data","id"],
+            [
+                {
+                    data:
+                        [
+                            {col:'zz_id',data:'1'},
+                            {col:'name',data:'bob'},
+                            {col:'zip',data:'13078'},
+                            {col:'city',data:'jamesville'}
+                        ],
+                    pk:'1'
+                },
+                
+                {
+                    data:
+                        [
+                            {col:'zz_id',data:'2'},
+                            {col:'name',data:'frank'},
+                            {col:'zip',data:'13210'},
+                            {col:'city',data:'syracuse'}
+                        ],
+                    pk:'2'
+                }
+            ]
+        )
+        script. 
+            var buttons = document.getElementsByClassName("view_row");
+            for (i=0;i<buttons.length;i++){
+                buttons[i].addEventListener('click',function(){
+                    alert('This is where you are brought to the detail view for id='  + this.getAttribute('data-pk'));
+                });
+            };
+  
+    

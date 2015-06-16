@@ -1,0 +1,23 @@
+mixin buttons_nav(array_of_tables)
+    for val in array_of_tables
+        button.nav= (val.table_name_display + ' ' + val.view_name_display)
+
+mixin column_headings(array_of_column_headings)
+        tr.headings_row
+            for heading in array_of_column_headings
+                td.headings_cell=heading
+        br
+
+mixin row(row_object)
+         tr.row
+            for column in row_object.data
+                td.cell=column.data
+            td 
+                button(class='view_row' data-pk=row_object.pk) View
+            br
+mixin table(array_of_headings, array_of_data)
+    table#list_view_results
+    +column_headings(array_of_headings)
+    for row_data in array_of_data
+        +row(row_data)
+    

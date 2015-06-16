@@ -10,17 +10,23 @@ var db = require('./db.js');
 var public_root = __dirname + '/../public/' ;
 var modules_root = __dirname + '/../node_modules/';
 
-app.use(express.static(public_root));
+//app.use(express.static(public_root));
 
-//app.get('/', function(request,response){
-//  console.log('\'/\' requested');
+app.set('view engine','jade');
+app.locals.pretty = true;
+
+app.get('/', function(request,response){
+  console.log('\'/\' requested');
   //response.sendfile(public_root + 'index.html');
-  //response.render(public_root + 'index.jade',{title: "This is a title" , message : "This is a message."});
-//});
-
-app.get('/socket.io/socket.io.js',function(req,res) {
-    res.sendfile(path.resolve(modules_root + 'socket.io/socket.io.js'));
+  response.render(public_root + '/views/index.jade');
 });
+
+app.get('/list', function(request,response){
+  console.log('\'/\' requested');
+  //response.sendfile(public_root + 'index.html');
+  response.render(public_root + '/views/list.jade');
+});
+
 
 io.on('connection', function(socket){
   console.log('Socket connected: ' + socket.id +' at ' + new Date());
