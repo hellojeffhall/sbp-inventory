@@ -48,7 +48,7 @@ db.sites.newSite = function(args){
 
 // RETURN ALL SITES IN DATABASE
 
-db.getAllSites = function(caller_socket, whatToEmit){
+db.getAllSites = function(callback_on_end){
   
   var col_to_return_array = [
     {name_col : 'name', name_display : 'Site Name'},
@@ -72,10 +72,10 @@ db.getAllSites = function(caller_socket, whatToEmit){
     var column_headings_array = result.fields.map(function(field){
       return field.name;
     });
-    // Return an object containing two arrays.
+    // Calls the callback function, passing an object containing two arrays.
     // The first is an array of column headings.
     // The second is an array of rows that were returned.
-    return {column_headings : column_headings_array, rows : result.rows};
+    callback_on_end({column_headings : column_headings_array, rows : result.rows});
   });
 };
 
