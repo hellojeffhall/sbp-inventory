@@ -75,6 +75,8 @@ db.getAllSites = function(callback_on_end){
     // Calls the callback function, passing an object containing two arrays.
     // The first is an array of column headings.
     // The second is an array of rows that were returned.
+    //console.log('db.js: query result: ' + JSON.stringify(result));
+    //console.log('now calling callback');
     callback_on_end({column_headings : column_headings_array, rows : result.rows});
   });
 };

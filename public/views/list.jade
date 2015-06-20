@@ -3,32 +3,10 @@ html
     head
         include head
     body
-        +table(
-            ["data","id"],
-            [
-                {
-                    data:
-                        [
-                            {col:'zz_id',data:'1'},
-                            {col:'name',data:'bob'},
-                            {col:'zip',data:'13078'},
-                            {col:'city',data:'jamesville'}
-                        ],
-                    pk:'1'
-                },
-                
-                {
-                    data:
-                        [
-                            {col:'zz_id',data:'2'},
-                            {col:'name',data:'frank'},
-                            {col:'zip',data:'13210'},
-                            {col:'city',data:'syracuse'}
-                        ],
-                    pk:'2'
-                }
-            ]
-        )
+        - array_headings = data.column_headings
+        - array_rows = data.rows
+        +table(array_headings, array_rows)         
+    
         script. 
             var buttons = document.getElementsByClassName("view_row");
             for (i=0;i<buttons.length;i++){
