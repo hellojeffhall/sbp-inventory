@@ -50,6 +50,11 @@ db.sites.newSite = function(args){
 
 db.getAllSites = function(callback_on_end){
   
+  // TOMOVE
+  // An individual view should be able to choose which
+  // columns will be displayed, based on the privledge
+  // set that the server determined the user to have.
+  
   var col_to_return_array = [
     {name_col : 'name', name_display : 'Site Name'},
     {name_col : 'address_line_1', name_display : 'Address Line 1'},

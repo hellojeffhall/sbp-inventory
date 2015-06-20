@@ -17,6 +17,7 @@ mixin row(array_of_headings, row_object)
             td 
                 button(class='view_row' data-pk='?') View
             br
+            
 mixin table(array_of_headings, array_of_data)
     table#list_view_results
         +column_headings(array_of_headings)
