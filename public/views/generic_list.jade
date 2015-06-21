@@ -3,9 +3,11 @@ html
     head
         include head
     body
-        - array_headings = data.column_headings
+        - array_col_names_display = data.column_names_display
+        - array_col_names_db = data.column_names_db
         - array_rows = data.rows
-        +table(array_headings, array_rows)         
+        - console.log(JSON.stringify(array_rows))
+        +table(array_col_names_display, array_col_names_db, array_rows)         
     
         script. 
             var buttons = document.getElementsByClassName("view_row");
@@ -15,4 +17,6 @@ html
                 });
             };
   
+    
+    
     

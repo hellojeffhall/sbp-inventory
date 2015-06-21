@@ -2,10 +2,10 @@ mixin buttons_nav(array_of_tables)
     for val in array_of_tables
         button.nav= (val.table_name_display + ' ' + val.view_name_display)
 
-mixin column_headings(array_of_column_headings)
+mixin column_headings(array_of_col_names_display)
     thead
         tr.headings_row
-            for heading in array_of_column_headings
+            for heading in array_of_col_names_display
                 th=heading
     br
 
@@ -13,15 +13,16 @@ mixin row(array_of_headings, row_object)
          tr.row
             each column_name in array_of_headings
                 - cell_data = row_object[column_name]
-                td=cell_data
+                td(data-col=column_name)=cell_data
             td 
-                button(class='view_row' data-pk='?') View
+                -pk = row_object.zz_id
+                button(class='view_row' data-pk=pk) View
             br
             
-mixin table(array_of_headings, array_of_data)
+mixin table(array_of_col_names_display, array_of_col_names_db, array_of_data)
     table#list_view_results
-        +column_headings(array_of_headings)
+        +column_headings(array_of_col_names_display)
         each row_obj in array_of_data
-            +row(array_of_headings , row_obj)
+            +row(array_of_col_names_db , row_obj)
 
     
