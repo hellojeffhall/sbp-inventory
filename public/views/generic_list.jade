@@ -12,7 +12,7 @@ html
             var buttons = document.getElementsByClassName("view_row");
             for (i=0;i<buttons.length;i++){
                 buttons[i].addEventListener('click',function(){
-                    alert('This is where you are brought to the detail view for id='  + this.getAttribute('data-pk'));
+                    window.location.href = '/site_detail/' + this.getAttribute('data-pk') ;
                 });
             };
   

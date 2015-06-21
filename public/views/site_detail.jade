@@ -4,8 +4,11 @@ html
         include head
     body
         h3
+            -pk = data.rows[0].zz_id
             p Site Detail - (This is where the sitename should go.)
+            button(id='back_to_list' data-pk=pk) Back
             
-        
-       
-    
+        script. 
+            document.getElementById('back_to_list').addEventListener('click',function(){
+                    window.location.href = '/site_list/' ;
+            });

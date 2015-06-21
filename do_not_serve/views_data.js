@@ -6,7 +6,7 @@ var views_data = {}; // This module contains an array of view objects,
                      // e.g.columns to show in that view, who is connected 
                      // to that view, etc.
 
-views_data.process_view_request = function(view_name, final_callback){
+views_data.process_view_request = function(view_name, criteria, final_callback){
     //
     // Take in a view name and a callback, and passes to the database the 
     // view object that corresponds to the view name.
@@ -21,7 +21,6 @@ views_data.process_view_request = function(view_name, final_callback){
     // For now, this will only work with no criteria, e.g., show all sites.
     // We will have to figure out a way to send criteria to the database to get
     // a particular site, item, etc. Maybe an object
-    var criteria = '';
     db.simple_select(view_object, criteria, final_callback);
   
 };

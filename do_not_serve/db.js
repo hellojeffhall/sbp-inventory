@@ -93,13 +93,12 @@ db.sites.newSite = function(args){
 
 
 db.simple_select = function(view_object, criteria, final_callback){
-    
+  
   // Array of column objects representing the columns that we want to fetch.
   var columns_array = view_object.columns;
   
   // Produce the portion of the SELECT clause that is made up of 
   // the fully-qualified column names.
-
   var clause_select = columns_array.map(function(temp_column){
     return temp_column.table_name_db + '.' + temp_column.col_name_db;
   }).join(', ');
@@ -110,19 +109,27 @@ db.simple_select = function(view_object, criteria, final_callback){
   // Make sure that we were given some criteria. If we were not, 
   // just return all rows. Maybe in the future we want to limit this to a 
   // certain number of rows.
+  var query_string = '';
+  var query = '';
   
-  var clause_where = (criteria != null && criteria !='') ?  criteria : '1=1';
+  if(typeof criteria.pk != 'undefined') {
+    // We were given a primary key, so retrieve just that record.
+    // For now, we are assuming that the presence of a primary key indicates
+    // that we want to get only a single record, like for a detail view.
+    query_string = 'SELECT ' + clause_select +  
+                      ' FROM ' + from_table +
+                      ' WHERE ' + from_table + '.zz_id' + ' =$1 ;';
+    query = db.client.query(query_string , [parseInt(criteria.pk,10)]);
 
-  var query_string = 'SELECT ' + 
-                          clause_select +  
-                      ' FROM ' + 
-                          from_table +
-                      ' WHERE ' + 
-                          clause_where + ';';
-                          
-                         
-  var query = db.client.query(query_string);
-
+  }
+  else{
+    // Otherwise, assume that we are getting all records in a table, probably
+    // for a list view.
+    query_string = 'SELECT ' + clause_select +  
+                      ' FROM ' + from_table;
+    query = db.client.query(query_string);
+  }
+  
   query.on('row', function(row, result){
     result.addRow(row);
   });

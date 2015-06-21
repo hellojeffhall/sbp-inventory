@@ -29,18 +29,17 @@ var views_path = public_root + 'views/';
 
 app.get('/', function(request,response){
   console.log('\'/' + '/' + '\' requested.');
-  renderResponse(response, null,null,null, '404.jade');
+  renderResponse(response, null,null,null, 'index.jade');
 });
 
 app.get('/:view_name', function(request,response){
   
   //Which view is the user looking for?
   var view_name = request.params.view_name;
-  console.log(view_name);
-  console.log(request.params);
+  log_request(request);
+  var criteria = {};
   // Make sure that such a view exists.
   if(views_data.views.hasOwnProperty(view_name)){
-    console.log('\'/' + view_name + '\' requested.');
     //
     // Take the requested view, and pass that into a method that will determine
     // (someday: whether or not the user is authorized to access that view and)
@@ -50,9 +49,8 @@ app.get('/:view_name', function(request,response){
     //
     // Since the database/views will need the request object, we might as well
     // bind it here.  
-
     var bound_sendResponse = renderResponse.bind(null,response);
-    views_data.process_view_request(request.params.view_name, bound_sendResponse);
+    views_data.process_view_request(request.params.view_name, criteria, bound_sendResponse);
   }
   // If the requested view cannot be found...
   else{
@@ -61,7 +59,40 @@ app.get('/:view_name', function(request,response){
   }
 });
 
+app.get('/:view_name/:criteria', function(request,response){
+  
+  //Which view is the user looking for?
+  var view_name = request.params.view_name;
+  var criteria = { pk : request.params.criteria };
+  
+  // Make sure that such a view exists.
+  if(views_data.views.hasOwnProperty(view_name)){
+    
+    log_request(request);
+    //
+    // Take the requested view, and pass that into a method that will determine
+    // (someday: whether or not the user is authorized to access that view and)
+    // which columns to ask the database for. The method will then get the data 
+    // from the database, and then execute a callback that will render the 
+    // Jade template to the "response" that we're going to bind to the callback.
+    //
+    // Since the database/views will need the request object, we might as well
+    // bind it here.  
+    var bound_sendResponse = renderResponse.bind(null,response);
+    views_data.process_view_request(request.params.view_name, criteria, bound_sendResponse);
+  }
+  // If the requested view cannot be found...
+  else{
+    log_request(request);
+    console.log('\'/' + view_name + '\' requested, but doesn\'t exist.');
+    render_fileNotFound(response);
+  }
+});
+
+
+
 app.get('*', function(request,response){
+  log_request(request);
   render_fileNotFound(response);
 });
 
@@ -99,9 +130,13 @@ http.listen(config.C9PORT, config.C9IP, function(){
 // };
 
 var render_fileNotFound = function(response_object){
+  response_object.status(404);
   response_object.render(views_path + '404.jade');
 };
 
+var log_request = function(request_object){
+  console.log(request_object.ip + ' requested ' + request_object.originalUrl);
+};
 // io.on('connection', function(socket){return;});
 //   //
 //   // 1. The request should send an object of connection data.
