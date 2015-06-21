@@ -1,4 +1,5 @@
 var db = require('./db.js');
+var server = require('./server.js');
 
 var views_data = {}; // This module contains an array of view objects, 
                      // where each view object contains data about that view,
@@ -14,10 +15,6 @@ views_data.process_view_request = function(view_name, final_callback){
     // The database will perform a SELECT query on the columns listed
     // in the view object, and perform the callback on query end.
     
-    // TRAP FOR VIEW OBJECT DOESN'T EXIST. IN THAT CASE, PASS THE 404 TEMPLATE
-    //
-    //  ?? final_callback(null,null,404.jade) OR server.js.serve(404)? etc
-    
     // Get the data about the given view.
     var view_object = views_data.views[view_name];
     
@@ -26,6 +23,7 @@ views_data.process_view_request = function(view_name, final_callback){
     // a particular site, item, etc. Maybe an object
     var criteria = '';
     db.simple_select(view_object, criteria, final_callback);
+  
 };
 
 views_data.build_clause_select = function(array_of_column_objects){
@@ -36,6 +34,7 @@ views_data.build_clause_select = function(array_of_column_objects){
     //
     // Then pass the string on to the query function and have the database
     // run the query. 
+    //
     return array_of_column_objects.map(function(this_col_obj){
         return this_col_obj.table_name_db + '.' + this_col_obj.col_name_db;
     });

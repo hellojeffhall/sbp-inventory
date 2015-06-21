@@ -1,3 +1,4 @@
+var server = {};
 
 // Require/setup servers, etc.
 
@@ -22,57 +23,83 @@ var public_root = __dirname + '/../public/' ;
 var modules_root = __dirname + '/../node_modules/';
 var views_path = public_root + 'views/';
 
+// Get a list of all current views, so that we can make sure that if a user 
+// requests a view that doesn't exist, we can save ourselves some time and 
+// render the 404 page right away.
 
+app.get('/', function(request,response){
+  console.log('\'/' + '/' + '\' requested.');
+  renderResponse(response, null,null,null, '404.jade');
+});
 
 app.get('/:view_name', function(request,response){
-  console.log('\'' + request.params.view_name + '\' requested.');
-
-  // Take the requested view, and pass that into a method that will determine
-  // (someday: whether or not the user is authorized to access that view and)
-  // which columns to ask the database for. The method will then get the data 
-  // from the database, and then execute a callback that will render the 
-  // Jade template to the "response" that we're going to bind to the callback.
-  //
-  // Since the database/views will need the request object, we might as well
-  // bind it here.  
   
-  var bound_sendResponse = renderResponse.bind(null,response);
-  views_data.process_view_request(request.params.view_name, bound_sendResponse);
+  //Which view is the user looking for?
+  var view_name = request.params.view_name;
+  console.log(view_name);
+  console.log(request.params);
+  // Make sure that such a view exists.
+  if(views_data.views.hasOwnProperty(view_name)){
+    console.log('\'/' + view_name + '\' requested.');
+    //
+    // Take the requested view, and pass that into a method that will determine
+    // (someday: whether or not the user is authorized to access that view and)
+    // which columns to ask the database for. The method will then get the data 
+    // from the database, and then execute a callback that will render the 
+    // Jade template to the "response" that we're going to bind to the callback.
+    //
+    // Since the database/views will need the request object, we might as well
+    // bind it here.  
+
+    var bound_sendResponse = renderResponse.bind(null,response);
+    views_data.process_view_request(request.params.view_name, bound_sendResponse);
+  }
+  // If the requested view cannot be found...
+  else{
+    console.log('\'/' + view_name + '\' requested, but doesn\'t exist.');
+    render_fileNotFound(response);
+  }
+});
+
+app.get('*', function(request,response){
+  render_fileNotFound(response);
 });
 
 var renderResponse = function(response_object, row_data, column_names_display, column_names_db, template_name){
   
-    //console.log('server.renderResponse running.');
     
   var data_to_send = {
                         column_names_db       : column_names_db, 
                         column_names_display  : column_names_display,
                         rows                  : row_data
                       };
-  template_name = (template_name===undefined ? 'generic_list.jade' : template_name);
-  console.log(' TO SEND: ' + JSON.stringify({data : data_to_send}));
+  template_name = (template_name===undefined ? 'generic_list.jade' : template_name);2
   response_object.render(views_path + template_name, {data: data_to_send});
-}
+};
 
 http.listen(config.C9PORT, config.C9IP, function(){
   console.log("listening on " + config.C9IP + ":" + config.C9PORT);
 });
 
-var processViewRequest = function(viewname){
-  // To be run when a browser requests a view via URL.
+// var processViewRequest = function(viewname){
+//   // To be run when a browser requests a view via URL.
   
-  // 1. Get array of table.column_names_display from views_data
+//   // 1. Get array of table.column_names_display from views_data
   
-  // 2. Get array of table.column_names_db from views_data
+//   // 2. Get array of table.column_names_db from views_data
   
-  // 3. Call a query method of db.js/querys.js, 
-  //    passing in array of column_names_db.
-  //    The database should send back array of row objects.
+//   // 3. Call a query method of db.js/querys.js, 
+//   //    passing in array of column_names_db.
+//   //    The database should send back array of row objects.
 
-  // 4. Render a Jade template, passing in an object that contains
-  //    the array of column headings and the array of row data.
+//   // 4. Render a Jade template, passing in an object that contains
+//   //    the array of column headings and the array of row data.
   
-  // 5. Update our tracker so that we know which view the socket is on.
+//   // 5. Update our tracker so that we know which view the socket is on.
+// };
+
+var render_fileNotFound = function(response_object){
+  response_object.render(views_path + '404.jade');
 };
 
 // io.on('connection', function(socket){return;});
