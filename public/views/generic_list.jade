@@ -3,19 +3,21 @@ html
     head
         include head
     body
-        - array_col_names_display = data.column_names_display
-        - array_col_names_db = data.column_names_db
-        - array_rows = data.rows
-        +table(array_col_names_display, array_col_names_db, array_rows)         
-    
-        script. 
-            var buttons = document.getElementsByClassName("view_row");
-            for (i=0;i<buttons.length;i++){
-                buttons[i].addEventListener('click',function(){
-                    window.location.href = '/site_detail/' + this.getAttribute('data-pk') ;
-                });
-            };
-  
+        div#body-container
+            - array_col_names_display = data.column_names_display
+            - array_col_names_db = data.column_names_db
+            - array_rows = data.rows
+            +table(array_col_names_display, array_col_names_db, array_rows)         
+        
+        include footer.jade
+            script. 
+                var buttons = document.getElementsByClassName("view_row");
+                for (i=0;i<buttons.length;i++){
+                    buttons[i].addEventListener('click',function(){
+                        window.location.href = '/site_detail/' + this.getAttribute('data-pk') ;
+                    });
+                };
+        
     
     
     

@@ -23,14 +23,29 @@ var public_root = __dirname + '/../public/' ;
 var modules_root = __dirname + '/../node_modules/';
 var views_path = public_root + 'views/';
 
-// Get a list of all current views, so that we can make sure that if a user 
-// requests a view that doesn't exist, we can save ourselves some time and 
-// render the 404 page right away.
+
+app.get('/favicon.ico', function(request,response){
+  // Later, when we have an icon, we can deal with this...
+  log_request(request);
+  response.status(404);
+  response.end();
+});
 
 app.get('/', function(request,response){
-  console.log('\'/' + '/' + '\' requested.');
+  log_request(request);
   renderResponse(response, null,null,null, 'index.jade');
 });
+
+app.get('/css/style.css', function(request,response){
+  console.log('css requested.');
+  response.sendFile(path.resolve(public_root + 'css/style.css'));
+});
+
+app.get('/js/scripts.js', function(request,response){
+  console.log('js requested.');
+  response.sendFile(path.resolve(public_root + 'js/scripts.js'));
+});
+
 
 app.get('/:view_name', function(request,response){
   
@@ -89,8 +104,6 @@ app.get('/:view_name/:criteria', function(request,response){
   }
 });
 
-
-
 app.get('*', function(request,response){
   log_request(request);
   render_fileNotFound(response);
@@ -135,7 +148,7 @@ var render_fileNotFound = function(response_object){
 };
 
 var log_request = function(request_object){
-  console.log(request_object.ip + ' requested ' + request_object.originalUrl);
+  console.log('IP ' + request_object.ip + ' requested ' + request_object.originalUrl);
 };
 // io.on('connection', function(socket){return;});
 //   //

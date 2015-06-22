@@ -3,8 +3,19 @@ html
     head
         include head
     body
-        h3 Home
-        p Please select an option.
+        #body-container
+            p Please select an option.
+            button(id='site_list' class='nav') Site List
+            button(id='item_list' class='nav') Items List
+        
+        include footer.jade
+            script.
+                var nav_buttons = document.getElementsByClassName('nav')
+                for(var i=0; i<nav_buttons.length ; i++){
+                    nav_buttons[i].addEventListener('click', 
+                        function(){ window.location.href = '/' + this.getAttribute('id') + '/';}
+                    );
+                };
         
         
        

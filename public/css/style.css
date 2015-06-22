@@ -1,7 +1,33 @@
 body {
-    background-color: lightblue;
+  background-color: lightblue;
 }
-h1 {
-  color: maroon;
-  padding: 0px;
-} 
+
+#banner{
+  color: black;
+  text-align:center;
+}
+
+#banner a:link, a:visited, a:hover, a:active{
+  text-decoration : none;
+  color : black;
+}
+
+#body-container{
+  text-align: center;
+  width: 80%;
+  min-height: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#body-container table{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#footer{
+  text-align: center;
+  left: 0;
+  right: 0;
+  top: 0;
+}

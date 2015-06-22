@@ -3,12 +3,21 @@ html
     head
         include head
     body
-        h3
-            -pk = data.rows[0].zz_id
-            p Site Detail - (This is where the sitename should go.)
+        #body-container
+            - site = data.rows[0]
+            - pk = site.zz_id
+            - sitename = site.name 
+            - addr_line_two = (site.address_line_2 == '')? '<br>' : '<br>' + site.address_line_2 + '<br>' 
+            - address =  site.address_line_1 + addr_line_two + site.city + ', ' + site.state + ' ' + site.zip
+            h3
+                p Site Detail - !{sitename}
+            p Site ID: !{pk}
+            p !{address}
             button(id='back_to_list' data-pk=pk) Back
-            
-        script. 
-            document.getElementById('back_to_list').addEventListener('click',function(){
-                    window.location.href = '/site_list/' ;
-            });
+        
+        
+        include footer.jade
+            script. 
+                document.getElementById('back_to_list').addEventListener('click',function(){
+                        window.location.href = '/site_list/' ;
+                });
