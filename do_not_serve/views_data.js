@@ -25,20 +25,6 @@ views_data.process_view_request = function(view_name, criteria, final_callback){
   
 };
 
-views_data.build_clause_select = function(array_of_column_objects){
-    //
-    // Take the array of columns and produce a string that the database
-    // can use as its SELECT clause. E.g.,
-    // SELECT <<table.column, table.column, table.column>> FROM <<base_table>>
-    //
-    // Then pass the string on to the query function and have the database
-    // run the query. 
-    //
-    return array_of_column_objects.map(function(this_col_obj){
-        return this_col_obj.table_name_db + '.' + this_col_obj.col_name_db;
-    });
-};
-
 views_data.change_view = function(socket_id, view_from, view_to){
     // 
     // Remove this socket_id from the list of current sockets in the 

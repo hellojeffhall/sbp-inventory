@@ -46,52 +46,6 @@ db.sites.newSite = function(args){
   }
 };
 
-// RETURN ALL SITES IN DATABASE
-
-// db.getAllSites = function(callback_on_end){
-  
-//   // TOMOVE
-//   // An individual view should be able to choose which
-//   // columns will be displayed, based on the privledge
-//   // set that the server determined the user to have.
-//   //
-//   // The database should only be responsible for returning
-//   // an array of row ojects, where each row object
-//   // has keys for each database column name and
-//   // the values that correspond to those columns for this record.
-  
-//   var col_to_return_array = [
-//     {name_col : 'name', name_display : 'Site Name'},
-//     {name_col : 'address_line_1', name_display : 'Address Line 1'},
-//     {name_col : 'address_line_2', name_display : 'Address Line 2'},
-//     {name_col : 'city', name_display : 'City'},
-//     {name_col : 'state', name_display : 'State'},
-//     {name_col : 'zip', name_display : 'Zip Code'} ,
-//     {name_col : 'zz_id', name_display : 'Site ID'} 
-//   ];
-//   var col_to_return_string = col_to_return_array.map(function(temp_col){
-//     return temp_col.name_col + ' as \"' + temp_col.name_display + '\"';
-//   }).join(", ");
-
-//   var query = db.client.query('SELECT ' + col_to_return_string + ' from sites;');
-//   query.on('row', function(row, result){
-//     result.addRow(row);
-//   });
-
-//   query.on('end', function(result){
-//     var column_headings_array = result.fields.map(function(field){
-//       return field.name;
-//     });
-//     // Calls the callback function, passing an object containing two arrays.
-//     // The first is an array of column headings.
-//     // The second is an array of rows that were returned.
-//     //console.log('db.js: query result: ' + JSON.stringify(result));
-//     //console.log('now calling callback');
-//     callback_on_end({column_headings : column_headings_array, rows : result.rows});
-//   });
-// };
-
-
 db.simple_select = function(view_object, criteria, final_callback){
   
   // Array of column objects representing the columns that we want to fetch.
